@@ -1,32 +1,36 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-lg sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200 animate-fade-in-up">
-                    <h3 class="text-lg font-semibold mb-4">Vos préinscriptions</h3>
+                    
+                    @if (session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
+                    <h3 class="text-2xl font-semibold mb-6">Vos préinscriptions</h3>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-100">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prénom</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adresse</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Niveau d'étude</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formation</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Année académique</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Nom</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Prénom</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Adresse</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Niveau d'étude</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Formation</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Année académique</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Statut</th>
+                                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($preinscriptions as $preinscription)
-                                <tr>
+                                <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $preinscription->nom }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $preinscription->prenom }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $preinscription->adresse }}</td>
@@ -34,16 +38,20 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $preinscription->formation }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $preinscription->annee_academ }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="{{ $preinscription->statut == 'en attente' ? 'text-red-transparent' : 'text-green-500' }}">
-                                            {{ $preinscription->statut }}
+                                        <span class="{{ $preinscription->statut == 'en attente' ? 'text-red-500' : 'text-green-500' }}">
+                                            {{ ucfirst($preinscription->statut) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <a href="{{ route('user.edit_training', ['id' => $preinscription->id]) }}" class="text-indigo-600 hover:text-indigo-900">Modifier</a>
+                                    <td class="px-6 py-4 whitespace-nowrap flex items-center space-x-4">
+                                        <a href="{{ route('user.edit_training', ['id' => $preinscription->id]) }}" class="text-indigo-600 hover:text-indigo-900">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                         <form action="{{ route('user.delete', ['id' => $preinscription->id]) }}" method="POST" class="inline" id="deleteForm-{{ $preinscription->id }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="text-red-600 hover:text-red-900 ml-2 deleteButton" data-form-id="{{ $preinscription->id }}">Supprimer</button>
+                                            <button type="button" class="text-red-600 hover:text-red-900 deleteButton" data-form-id="{{ $preinscription->id }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -55,59 +63,60 @@
             </div>
         </div>
     </div>
-    <div id="myModal" class="modal">
-        <div class="modal-content small-width">
-            <span class="close">&times;</span>
-            <p>Voulez-vous vraiment supprimer votre préinscription ?</p>
-            <button id="confirmDeleteButton" class="confirm-button">Oui</button>
-            <button class="cancel-button">Non</button>
+
+    <!-- Pop-up de confirmation -->
+    <div id="myModal" class="modal fixed w-full h-full top-0 left-0 flex items-center justify-center" style="display:none;">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+            <div class="modal-content py-4 text-left px-6">
+                <div class="flex justify-between items-center pb-3">
+                    <p class="text-2xl font-bold">Confirmation</p>
+                    <span class="modal-close cursor-pointer z-50">&times;</span>
+                </div>
+                <p class="mb-4">Voulez-vous vraiment supprimer cette formation ?</p>
+                <div class="flex justify-end pt-2">
+                    <button id="confirmDeleteButton" class="modal-close px-4 bg-red-600 p-3 rounded-lg text-white hover:bg-red-400 mr-2">Oui</button>
+                    <button class="modal-close px-4 bg-gray-500 p-3 rounded-lg text-white hover:bg-gray-400">Non</button>
+                </div>
+            </div>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Sélectionnez tous les boutons de suppression
             var deleteButtons = document.querySelectorAll('.deleteButton');
-    
-            // Pour chaque bouton de suppression, ajoutez un gestionnaire d'événements pour afficher le pop-up correspondant
+            var modal = document.getElementById('myModal');
+            var confirmDeleteButton = document.getElementById('confirmDeleteButton');
+            var currentFormId;
+
             deleteButtons.forEach(function (button) {
                 button.addEventListener('click', function () {
-                    var formId = button.getAttribute('data-form-id');
-                    var modal = document.getElementById('myModal');
-    
-                    // Lorsque le bouton de suppression est cliqué, affichez le pop-up
+                    currentFormId = button.getAttribute('data-form-id');
                     modal.style.display = 'block';
-    
-                    // Lorsque l'utilisateur clique sur le bouton "Oui", soumettez le formulaire de suppression correspondant
-                    var confirmDeleteButton = document.getElementById('confirmDeleteButton');
-                    confirmDeleteButton.addEventListener('click', function () {
-                        var deleteForm = document.getElementById('deleteForm-' + formId);
-                        deleteForm.submit();
-                    });
                 });
             });
-    
-            // Sélectionnez le bouton "Non" et la croix de fermeture dans le pop-up
-            var cancelButton = document.querySelector('.cancel-button');
-            var closeButton = document.querySelector('.close');
-    
-            // Lorsque l'utilisateur clique sur le bouton "Non" ou la croix de fermeture, cachez le pop-up
-            cancelButton.addEventListener('click', function () {
-                var modal = document.getElementById('myModal');
-                modal.style.display = 'none';
+
+            confirmDeleteButton.addEventListener('click', function () {
+                if (currentFormId) {
+                    var deleteForm = document.getElementById('deleteForm-' + currentFormId);
+                    deleteForm.submit();
+                    modal.style.display = 'none';
+                }
             });
-    
-            closeButton.addEventListener('click', function () {
-                var modal = document.getElementById('myModal');
-                modal.style.display = 'none';
+
+            var closeButtons = document.querySelectorAll('.modal-close');
+            closeButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    modal.style.display = 'none';
+                });
             });
-    
-            // Lorsque l'utilisateur clique en dehors de la boîte de dialogue, cachez le pop-up
+
             window.addEventListener('click', function (event) {
-                var modal = document.getElementById('myModal');
                 if (event.target == modal) {
                     modal.style.display = 'none';
                 }
             });
         });
     </script>
+    
+    @include('layouts.footer')
 </x-app-layout>

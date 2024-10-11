@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('adresse');
             $table->string('niveau_etude');
             $table->string('formation');
-            $table->date('annee_academ');
+            $table->string('annee_academ');
             $table->timestamps();
         });
     }

@@ -47,7 +47,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="annee_academ" class="form-label">Année académique</label>
-                                <input type="date" class="form-control" id="annee_academ" name="annee_academ" placeholder="Entrez l'année académique" required>
+                                <input type="text" class="form-control" id="annee_academ" name="annee_academ" placeholder="Entrez l'année académique" required>
                             </div>
                         </div>
 
@@ -57,4 +57,5 @@
             </div>
         </div>
     </div>
+    @include('layouts.footer')
 </x-app-layout>

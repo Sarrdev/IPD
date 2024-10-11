@@ -18,12 +18,12 @@ class UserController extends Controller
     
     //afficher la vue editadmin qui contient le formulaire de modification
     public function edit($id){
-        $preinscriptions = Preinscription::find($id);
+       $preinscriptions = Preinscription::find($id);
     
-        if (!$preinscriptions) {
-            return redirect()->back()->with('error', 'Préinscription non trouvée');
-        }
-    
+        // if (!$preinscriptions) {
+        //     return redirect()->back()->with('error', 'Préinscription non trouvée');
+        // }
+        
         return view('edit_training', ['preinscription' => $preinscriptions]);
     }
     

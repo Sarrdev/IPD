@@ -3,7 +3,10 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\GestionforController;
 use App\Http\Controllers\Admin\ListForControllerAd;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ListeforController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\PreinscriptController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController;
@@ -41,6 +44,15 @@ Route::middleware(['auth', 'userMiddleware'])->group(function(){
     Route::get('listeformation', [ListeforController::class, 'index'])->name('user.viewformation');
     //affichage de liste des formations dispo pour l'école
     Route::get('preinscript' , [ListeforController::class, 'trainingAdmin'])->name('user.redirectinscription');
+    //Récupération des préinscriptions de l'utilisateur authentifié
+    Route::get('comments', [CommentController::class, 'userIndex'])->name('user.comments');
+    
+    Route::post('preinscript/{id}/comment', [CommentController::class, 'store'])->name('comment.store');
+
+    Route::get('docs', [DocumentController::class, 'create'])->name('documents.create');
+    Route::post('docs', [DocumentController::class, 'store'])->name('documents.store');
+    //paiyement
+    Route::get('paie', [PaiementController::class, 'index'])->name('user.paiement');
 });
 
 //route admin
@@ -61,4 +73,13 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function(){
     Route::post('/admin/admin/editamin/{id}', [GestionforController::class, 'updateformation'])->name(('admin.updateTraining'));
     // Suppression d'une formation
     Route::delete('/admin/admin/delete/{id}', [GestionforController::class, 'destroy'])->name('admin.delete');
+    //Voir les commentaires
+    Route::get('admin/admin/comments', [CommentController::class, 'index'])->name('admin.comments');
+
+    Route::get('admin/admin/documents', [DocumentController::class, 'index'])->name('admin.documents');
+    Route::get('admin/admin/documents/{document}', [DocumentController::class, 'show'])->name('admin.documents.show');
+    Route::delete('admin/admin/documents/{document}', [DocumentController::class, 'destroy'])->name('admin.documents.destroy');
+    // Voir le profil d'une préinscription
+    Route::get('admin/admin/profil/{id}', [AdminController::class, 'showProfile'])->name('admin.profil');
+
 });

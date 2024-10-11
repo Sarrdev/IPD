@@ -4,9 +4,10 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
+
                 <div class="shrink-0 flex items-center">
                     <a href="{{ Auth::user()->usertype == 'admin' ? route ('admin.dashboard') : route('dashboard')}}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                       <img src="{{ asset('logo/logibg.png') }}" class="bg">
                     </a>
                 </div>
 
@@ -17,16 +18,18 @@
                     </x-nav-link>
 
                     {{-- admin links--}}
-
                     @if (Auth::user()->usertype == 'admin')
                         <x-nav-link :href="route('admin.displayfor')" :active="request()->routeIs('admin.displayfor')">
                             {{ __('Gestion des formations') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.gestionsave')" :active="request()->routeIs('admin.gestionsave')">
-                            {{ __('Save a training') }}
+                            {{ __('Formation +') }}
                         </x-nav-link>
-                        <x-nav-link href="#" :active="request()->routeIs('admin.document')">
+                        <x-nav-link :href="route('admin.documents')" :active="request()->routeIs('admin.documents')">
                             {{ __('Documents') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.comments')" :active="request()->routeIs('admin.comments')">
+                            {{ __('Commentaires reçus') }}
                         </x-nav-link>
                     @endif
 
@@ -38,11 +41,16 @@
                         <x-nav-link href="listeformation" :active="request()->routeIs('user.listeformation')">
                             {{ __('Listes des formations') }}
                         </x-nav-link>                   
-                        <x-nav-link href="documents" :active="request()->routeIs('user.documents')">
+                        {{-- <x-nav-link href="docs" :active="request()->routeIs('documents.create')">
                             {{ __('Documents réquis') }}
+                        </x-nav-link> --}}
+                        <x-nav-link :href="route('user.comments')" :active="request()->routeIs('user.comments')">
+                            {{ __('Commentaires') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('user.paiement')" :active="request()->routeIs('user.paiement')">
+                            {{ __('Paiement') }}
                         </x-nav-link>
                     @endif
-
                 </div>
             </div>
 
@@ -55,7 +63,7 @@
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
@@ -73,7 +81,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Déconnexion') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>

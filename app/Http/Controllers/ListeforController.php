@@ -10,6 +10,7 @@ class ListeforController extends Controller
     //affichage de la page liste des formations
     public function index(){
         $trainingads = ListeFormation::all();
+        // return response()->json($trainingads);
         return view('listeformation',compact('trainingads'));
     }
 

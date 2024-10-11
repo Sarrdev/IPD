@@ -21,7 +21,7 @@ class PreinscriptController extends Controller
             'adresse' => 'required|string|max:255',
             'niveau_etude' => 'required|string|max:255',
             'formation' => 'required|string|max:255',
-            'annee_academ' => 'required|date|max:255', 
+            'annee_academ' => 'required|string|max:255', 
         ]);
         //ajouter un nouveau préinscription
         $preinscript = new Preinscription();
@@ -37,6 +37,7 @@ class PreinscriptController extends Controller
         //sauvegarde des donnees à la BD
         $preinscript->save();
 
-        return back()->with('success', 'Votre préinscription a été reçue avec succès!');
+        return view('docs');
+        
     }
 }

@@ -1,41 +1,58 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Save a training') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
 
-    <div class="py-12">
-        <div class="max-w-md mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg fade-in-up">
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
+@section('content')
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h4 font-weight-bold text-dark">
+                Ajouter une Formation
+            </h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg border-0 rounded-lg ">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    <div class="card-body">
+                        <h5 class="card-title mb-4 text-primary">
+                            <i class="fas fa-plus-circle me-2"></i>Formulaire de Formation
+                        </h5>
+                        <form action="{{ route('admin.savetraining') }}" method="POST">
+                            @csrf
+
+                            <div class="mb-3">
+                                <label for="filiere" class="form-label">Nom de la Filière</label>
+                                <input type="text" name="nomfiliere" id="filiere" class="form-control rounded-3" placeholder="Entrez le nom de la filière" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="parcours" class="form-label">Parcours</label>
+                                <input type="text" name="parcours" id="parcours" class="form-control rounded-3" placeholder="Entrez le parcours" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cout" class="form-label">Coût Licence/an</label>
+                                <input type="text" name="cout" id="cout" class="form-control rounded-3" placeholder="Entrez le coût Licence/an" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="coutm" class="form-label">Coût Master/an</label>
+                                <input type="text" name="coutm" id="coutm" class="form-control rounded-3" placeholder="Entrez le coût Master/an" required>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary rounded-pill">
+                                    <i class="fas fa-save me-2"></i> Enregistrer
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                @endif
-                <div class="p-6">
-                    <h2 class="text-xl mb-4">Formulaire de Formation</h2>
-                    <form action="{{route('admin.savetraining')}}" method="POST">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="filiere" class="block text-sm font-medium text-gray-700">Nom de la Filière</label>
-                            <input type="text" name="nomfiliere" id="filiere" autocomplete="filiere" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="parcours" class="block text-sm font-medium text-gray-700">Parcours</label>
-                            <input type="text" name="parcours" id="parcours" autocomplete="parcours" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        </div>
-
-                        <div class="flex justify-end">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Enregistrer
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

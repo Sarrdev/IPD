@@ -9,5 +9,5 @@ class ListeFormation extends Model
 {
     use HasFactory;
 
-   protected $fillable = ["nomfiliere", "parcours"];
+   protected $fillable = ["nomfiliere", "parcours", "cout", "coutm"];
 }
